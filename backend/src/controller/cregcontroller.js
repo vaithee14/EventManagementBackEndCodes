@@ -1,61 +1,88 @@
-// category payment user registration
+const User = require("../modals/cregmodals");
+const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
-const RegistrationModel = require("../modals/cregmodals");
 
+// nodemailer Transpoter
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "svaithi2004@gmail.com",
+    pass: "xfsw nogn nwik timm",
+  },
+});
+
+// Register and Send Email
 const registerUser = async (req, res) => {
   try {
-    const { username, email, password, mobile } = req.body;
+    const { username, email, mobile, password } = req.body;
 
-    if (!username || !email || !password || !mobile) {
-      return res.status(400).json({ message: "All fields are required" });
+    // Check if user already exists
+    const existingUsers = await User.findOne({ email: email });
+    console.log(existingUsers, "existingUser");
+
+    if (existingUsers) {
+      return res.status(400).json({ message: "Email already exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-    const userData = await RegistrationModel.create({
+    // create new user
+    const newUser = new User({
       username,
       email,
-      password: hashedPassword,
       mobile,
+      password: hashedPassword,
     });
+    await newUser.save();
 
-    res.status(201).json({
-      message: "Registration successful!",
-      user: userData,
-    });
+    // send welcome Email
+    const mailOptions = {
+      from: "svaithi2004@gmail.com",
+      to: email,
+      subject: "Welcome to Our Event Platform!",
+      html: `
+      <h2>Welcome, ${email}!</h2>
+      <p>Thank you for registering for our events. You can now book tickets for upcoming events.</p>
+      <p>Best Regards,<br>Your Event Team</p>
+       `,
+    };
+    await transporter.sendMail(mailOptions);
+    res.status(201).json({ message: "Check your email! or password" });
   } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ message: "Internal server error", error });
+    res.status(500).json({ message: error.message });
   }
 };
-const getUserRegister = async (req, res) => {
+// user login
+const userlogin = async (req, res) => {
   try {
-    const users = await RegistrationModel.find();
-    res.status(200).json(users);
+    const { username, email, mobile, password } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    // compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    const mailOptions = {
+      from: "svaithee2004@gmail.com",
+      to: email,
+      subject: "Login Successful",
+      html: `<h2>Hello, ${email}!</h2>
+         <p>Thank you for  login for our events. You can now book tickets for upcoming events..</p>
+         <p>Best Regards,<br>Your Event Team</p>`,
+    };
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ message: "Login successful. Email sent!" });
   } catch (error) {
-    console.error("Error fetching users:", error);
-    res.status(500).json({ message: "Internal server error", error });
+    res.status(500).json({ message: error.message });
   }
 };
 
-// delete
-const deleteUserRegister = async (req, res) => {
-  const deletedata = await RegistrationModel.findByIdAndDelete(req.params.id);
-  res.send(deletedata);
-};
-
-// update user register
-const updateUserregister = async (req, res) => {
-  const update = await RegistrationModel.findByIdAndUpdate(
-    req.params.id,
-    req.body
-  );
-  res.send(update);
-};
-
-module.exports = {
-  registerUser,
-  getUserRegister,
-  deleteUserRegister,
-  updateUserregister,
-};
+module.exports = { registerUser, userlogin };
