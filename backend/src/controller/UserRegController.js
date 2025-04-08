@@ -71,7 +71,7 @@ const UserLogin = async (req, res) => {
       from: "svaithee2004@gmail.com",
       to: email,
       subject: "Login Successful",
-      html: `<h2>Hello, ${email}!</h2>
+      html: `<h2>Hello!</h2>
          <p>Thank you for  login for our events. You can now book tickets for upcoming events..</p>
          <p>Best Regards,<br>Your Event Team</p>`,
     };

@@ -25,7 +25,6 @@ const registerUser = async (req, res) => {
     }
 
     // hash password
-    const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // create new user
@@ -38,18 +37,19 @@ const registerUser = async (req, res) => {
     await newUser.save();
 
     // send welcome Email
-    const mailOptions = {
+    await transporter.sendMail({
       from: "svaithi2004@gmail.com",
       to: email,
       subject: "Welcome to Our Event Platform!",
       html: `
-      <h2>Welcome, ${email}!</h2>
-      <p>Thank you for registering for our events. You can now book tickets for upcoming events.</p>
-      <p>Best Regards,<br>Your Event Team</p>
-       `,
-    };
-    await transporter.sendMail(mailOptions);
-    res.status(201).json({ message: "Check your email! or password" });
+        <h2>Welcome, ${username}!</h2>
+        <p>Thank you for registering. You can now book tickets for upcoming events.</p>
+        <p>Best Regards,<br>Your Event Team</p>`,
+    });
+
+    res
+      .status(201)
+      .json({ message: "Registration successful. Check your email!" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -57,7 +57,7 @@ const registerUser = async (req, res) => {
 // user login
 const userlogin = async (req, res) => {
   try {
-    const { username, email, mobile, password } = req.body;
+    const { email, password } = req.body;
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -70,15 +70,13 @@ const userlogin = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const mailOptions = {
-      from: "svaithee2004@gmail.com",
+    await transporter.sendMail({
+      from: "svaithi2004@gmail.com",
       to: email,
       subject: "Login Successful",
-      html: `<h2>Hello, ${email}!</h2>
-         <p>Thank you for  login for our events. You can now book tickets for upcoming events..</p>
-         <p>Best Regards,<br>Your Event Team</p>`,
-    };
-    await transporter.sendMail(mailOptions);
+      html: `<h2>Hello, ${user.username}!</h2>
+             <p>You have successfully logged in.</p>`,
+    });
     res.status(200).json({ message: "Login successful. Email sent!" });
   } catch (error) {
     res.status(500).json({ message: error.message });

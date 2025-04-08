@@ -36,18 +36,18 @@ const addDnaceEvent = async (req, res) => {
   }
 };
 
-const getdanceEventsbyId = async(req,res)=>{
+const getdanceEventsbyId = async (req, res) => {
   const danceEventId = req.params.id;
 
-  try{
-    const getdanceevents = await DanceModal.findOne({_id:danceEventId});
+  try {
+    const getdanceevents = await DanceModal.findOne({ _id: danceEventId });
     res.json(getdanceevents);
-  }catch(error){
-    res.status(500).json({message:"Dance Id is Not Valid"})
+  } catch (error) {
+    res.status(500).json({ message: "Dance Id is Not Valid" });
   }
-}
+};
 module.exports = {
   getdanceEvents,
   addDnaceEvent,
-  getdanceEventsbyId
+  getdanceEventsbyId,
 };

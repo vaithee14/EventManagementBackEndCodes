@@ -7,8 +7,10 @@ const Routers = require("./src/route/categoryRoutes");
 const RegisRoute = require("../backend/src/route/cregroute");
 const MusicRoute = require("./src/route/musiccategoryroute");
 const DanceRoute = require("./src/route/dancingcategoryroute");
+const BirthdayRoute = require("./src/route/birthdayRouter");
 const UpcomingEventroute = require("./src/route/upcomingEventRoute");
-const UserRegistration = require("./src/route/UserRegRoute")
+const UserRegistration = require("./src/route/UserRegRoute");
+const UserSubscrib = require("./src/route/emailroute");
 app.use(express.json());
 app.use(cors());
 
@@ -22,13 +24,16 @@ app.use("/payment", RegisRoute);
 app.use("/api/music", MusicRoute);
 // get dancing from category
 app.use("/api/dance", DanceRoute);
-// music discription api
-// app.use("/music/discription",MusicDiscriptions)
+// birthday api
+app.use("/api/birthday", BirthdayRoute);
 
 // upcoimg events
 app.use("/upcomingEvent/api", UpcomingEventroute);
+// upcoming event user register
+app.use("/userRegistration", UserRegistration);
 
-app.use("/userRegistration",UserRegistration)
+// subscrib
+app.use("/user/subscrib", UserSubscrib);
 
 storedDatas.on("open", () => {
   app.listen(4050, () => {
