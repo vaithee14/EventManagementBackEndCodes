@@ -18,24 +18,10 @@ const birthdayCategorySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  location: {
-    type: String,
-    required: true,
-  },
-  date: {
-    type: String,
-    required: true,
-  },
-  time: {
-    type: String,
-    required: true,
-  },
-  images: [
-    {
-      type: String,
-    },
-  ],
 });
 
-const BirthdayModel = mongoose.model("birthdayCategory", birthdayCategorySchema);
+const BirthdayModel = mongoose.model(
+  "birthdayCategory",
+  birthdayCategorySchema
+);
 module.exports = BirthdayModel;

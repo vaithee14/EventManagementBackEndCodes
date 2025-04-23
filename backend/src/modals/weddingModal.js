@@ -1,21 +1,22 @@
 const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
 
-const UserSchema = new mongoose.Schema({
+const WeddingMSchema = new mongoose.Schema({
   _id: {
     type: String,
     default: uuidv4,
   },
-  email: {
+  title: {
     type: String,
-    unique: true,
     required: true,
   },
-  password: {
+  description: {
     type: String,
     required: true,
+  },
+  image: {
+    type: String,
   },
 });
-
-const UserModel = mongoose.model("register", UserSchema);
-module.exports = UserModel;
+const WeddingModal = mongoose.model("Wedding music artist", WeddingMSchema);
+module.exports = WeddingModal;

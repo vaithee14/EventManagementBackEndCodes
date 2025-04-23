@@ -1,18 +1,20 @@
-// last email registration
 const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
 
-const emailSchema = new mongoose.Schema({
+const serviceSchema = new mongoose.Schema({
   _id: {
     type: String,
     default: uuidv4,
   },
-  email: {
+
+  servicesName: {
+    type: String,
+    required: true,
+  },
+  imageUrl: {
     type: String,
     required: true,
   },
 });
 
-const EmailModel = mongoose.model("SubscribEmail", emailSchema);
-
-module.exports = EmailModel;
+module.exports = mongoose.model("Services", serviceSchema);

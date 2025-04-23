@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
 
-const UpcomingEventSchema = new mongoose.Schema({
+const corporateEventSchema = new mongoose.Schema({
   _id: {
     type: String,
     default: uuidv4,
@@ -14,22 +14,10 @@ const UpcomingEventSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  date: {
-    type: String,
-    required: true,
-  },
-  location: {
-    type: String,
-    required: true,
-  },
   image: {
     type: String,
     required: true,
   },
 });
-
-const UpcoimgEventModal = mongoose.model(
-  "UpcoimgEventModal",
-  UpcomingEventSchema
-);
-module.exports = UpcoimgEventModal;
+const conporateModel = mongoose.model("CorporateEvents", corporateEventSchema);
+module.exports = conporateModel;

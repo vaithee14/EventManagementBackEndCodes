@@ -15,21 +15,6 @@ const musicCategorySchema = new mongoose.Schema({
   image: {
     type: String,
   },
-  location: {
-    type: String,
-  },
-  date: {
-    type: String,
-  },
-
-  time: {
-    type: String,
-  },
-  images: [
-    {
-      type: String,
-    },
-  ],
 });
 
 const MusicModel = mongoose.model("MusicEvent", musicCategorySchema);

@@ -1,24 +1,15 @@
 const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
-
-const danceCategorySchema = new mongoose.Schema({
+const EventregiserSchema = new mongoose.Schema({
   _id: {
     type: String,
     default: uuidv4,
   },
-  title: {
+  name: {
     type: String,
     required: true,
   },
-  image: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  location: {
+  email: {
     type: String,
     required: true,
   },
@@ -26,16 +17,20 @@ const danceCategorySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  time: {
+  mobile: {
+    type: Number,
+    required: true,
+  },
+  city: {
+    type: String,
+  },
+  select: {
     type: String,
     required: true,
   },
-  images: [
-    {
-      type: String,
-    },
-  ],
+  message: {
+    type: String,
+  },
 });
-
-const DanceEvent = mongoose.model("DanceEvent", danceCategorySchema);
-module.exports = DanceEvent;
+const EnquiryModel = mongoose.model("EnquiryRegistration", EventregiserSchema);
+module.exports = EnquiryModel;

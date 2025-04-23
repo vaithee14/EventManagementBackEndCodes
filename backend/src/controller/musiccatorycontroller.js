@@ -12,23 +12,13 @@ const getmusicEvents = async (req, res) => {
 // POST Music Event (Add New Event)
 const addMusicEvent = async (req, res) => {
   try {
-    const { title, description, image, location, date, time } = req.body;
+    const { title, description, image } = req.body;
 
     // Validate required fields
-    if (!title || !description || !image || !location || !date || !time) {
+    if (!title || !description || !image) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const newEvent = new musicModal({
-      title,
-      description,
-      image,
-      location,
-      date,
-      time,
-    });
-
-    await newEvent.save();
     res
       .status(201)
       .json({ message: "Music event added successfully", newEvent });
@@ -37,16 +27,14 @@ const addMusicEvent = async (req, res) => {
   }
 };
 
-const getmusicEventsById = async (req, res) => {
-  const musicEventId = req.params.id;
-  // console.log(musicEventId, "musicEventId");
+// const getmusicEventsById = async (req, res) => {
 
-  try {
-    const getmusicevents = await musicModal.findOne({ _id: musicEventId });
-    res.json(getmusicevents);
-  } catch (error) {
-    res.status(500).json({ message: "Music Id is not Valid" });
-  }
-};
+//   try {
+//     const getmusicevents = await musicModal.findOne({ _id: musicEventId });
+//     res.json(getmusicevents);
+//   } catch (error) {
+//     res.status(500).json({ message: "Music Id is not Valid" });
+//   }
+// };
 
-module.exports = { getmusicEvents, addMusicEvent, getmusicEventsById };
+module.exports = { getmusicEvents, addMusicEvent };
